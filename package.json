@@ -19,5 +19,8 @@
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/DamonOehlman/sdp-lines/issues"
+  },
+  "devDependencies": {
+    "tape": "~2.0.0"
   }
 }

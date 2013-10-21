@@ -40,8 +40,72 @@
   - https://github.com/clux/sdp-transform
   - https://github.com/legastero/sdp
   - https://github.com/buildar/getting_started_with_webrtc
+
+  ## Related Information
+
+  The following standard documents are related to SDP with regards to WebRTC:
+
+  - <http://tools.ietf.org/id/draft-nandakumar-rtcweb-sdp-01.html>
+  - <http://tools.ietf.org/html/rfc3264>
+  - <http://tools.ietf.org/html/rfc4566>
+
 **/
 
-module.exports = function(input) {
+function SdpLines(input) {
+  if (! (this instanceof SdpLines)) {
+    return new SdpLines(input);
+  }
 
+  this.data = input.split(/\r\n/);
+}
+
+module.exports = SdpLines;
+
+/**
+  ### modify(regex, modifier)
+
+  The `modify` method is used to apply a change to the underlying data. When
+  a line matches the specified regex, the modifier function is invoked with
+  the following function signature:
+
+  ```js
+  function modifier(line, match, type, payload) {
+    // return the line to reinject back into the sdp
+    return line;
+  }
+  ```
+
+  The arguments to the following are as follows:
+
+  - `line`:    the full line that matched the regex
+  - `match`:   the match result from executing the regex
+  - `type`:    the line type which is specified prior to the = (e.g. `a`)
+  - `payload`: the payload of the line (after the = character)
+
+  In the sample modifier above, we simply return the line unchanged, but
+  we can reformat the line or replace it entirely.
+  
+**/
+SdpLines.prototype.modify = function(regex, modifier) {
+  this.data = this.data.map(function(line, index) {
+    var match = regex.exec(line);
+
+    // if we have a match (and a modifier function) modify
+    if (match && typeof modifier == 'function') {
+      line = modifier.apply(null, [line, regex].concat(line.split('=')));
+    }
+
+    return line;
+  });
+
+  return this;
+}
+
+/**
+  ### toString()
+
+  Convert back to a string representation
+**/
+SdpLines.prototype.toString = function() {
+  return this.data.join('\r\n');
 };
