@@ -22,5 +22,8 @@
   },
   "devDependencies": {
     "tape": "~2.0.0"
+  },
+  "dependencies": {
+    "whisk": "~0.1.0"
   }
 }

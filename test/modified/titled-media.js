@@ -55,4 +55,4 @@ module.exports = [
   'a=ssrc:1256802598 msid:T0umG22LSv7FNw4Bx9rfNvOTmhLV6rz3pRFX T0umG22LSv7FNw4Bx9rfNvOTmhLV6rz3pRFXv0',
   'a=ssrc:1256802598 mslabel:T0umG22LSv7FNw4Bx9rfNvOTmhLV6rz3pRFX',
   'a=ssrc:1256802598 label:T0umG22LSv7FNw4Bx9rfNvOTmhLV6rz3pRFXv0'
-];
+].join('\n');

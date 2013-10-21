@@ -1,6 +1,8 @@
 /* jshint node: true */
 'use strict';
 
+var flatten = require('whisk/flatten');
+
 /**
   # sdp-lines
 
@@ -56,7 +58,7 @@ function SdpLines(input) {
     return new SdpLines(input);
   }
 
-  this.data = input.split(/\r\n/);
+  this.data = input.split(/\n/);
 }
 
 module.exports = SdpLines;
@@ -84,20 +86,22 @@ module.exports = SdpLines;
 
   In the sample modifier above, we simply return the line unchanged, but
   we can reformat the line or replace it entirely.
-  
+
 **/
 SdpLines.prototype.modify = function(regex, modifier) {
+  // modify any lines that match the regex, and then flatten the result
   this.data = this.data.map(function(line, index) {
     var match = regex.exec(line);
 
     // if we have a match (and a modifier function) modify
     if (match && typeof modifier == 'function') {
-      line = modifier.apply(null, [line, regex].concat(line.split('=')));
+      line = modifier.apply(null, [line, match].concat(line.split('=')));
     }
 
     return line;
-  });
+  }).reduce(flatten);
 
+  // chaining
   return this;
 }
 
@@ -107,5 +111,5 @@ SdpLines.prototype.modify = function(regex, modifier) {
   Convert back to a string representation
 **/
 SdpLines.prototype.toString = function() {
-  return this.data.join('\r\n');
+  return this.data.join('\n');
 };
