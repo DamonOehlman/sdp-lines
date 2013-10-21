@@ -1,6 +1,6 @@
 {
   "name": "sdp-lines",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "SDP in-place line modification library",
   "main": "index.js",
   "scripts": {
